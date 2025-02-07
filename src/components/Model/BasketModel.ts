@@ -11,9 +11,9 @@ export interface IBasketModel {
 
 export class BasketModel implements IBasketModel {
   // защищённый массив, хранит список товаров в корзине. 
-  // инициализируется пустым массивом в конструкторе класса.
   protected _basketProducts: IProductItem[];
 
+  // инициализируеn пустым массивом в конструкторе класса.
   constructor() {
     this._basketProducts = [];
   }

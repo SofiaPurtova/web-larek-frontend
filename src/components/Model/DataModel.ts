@@ -24,6 +24,7 @@ export class DataModel implements IDataModel {
     return this._productCards;
   }
 
+  // открывает модальное окно с информацией о товаре
   setPreview(item: IProductItem) {
     this.selectedСard = item;
     this.events.emit('modalCard:open', item)

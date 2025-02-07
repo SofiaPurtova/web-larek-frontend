@@ -103,6 +103,7 @@ export class FormModel implements IFormModel {
     return Object.keys(errors).length === 0;
   }
 
+  // Возвращает объект с полными данными заказа
   getOrderLot() {
     return {
       payment: this.payment,
