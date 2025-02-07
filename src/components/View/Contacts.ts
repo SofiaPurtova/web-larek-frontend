@@ -5,7 +5,7 @@ export interface IContacts {
   inputAll: HTMLInputElement[];
   buttonSubmit: HTMLButtonElement;
   formErrors: HTMLElement;
-  render(): HTMLElement;
+  render(): HTMLElement ;
 }
 
 export class Contacts implements IContacts {

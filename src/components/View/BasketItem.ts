@@ -33,7 +33,7 @@ export class BasketItem implements IBasketItem {
     if (value === null) {
       return 'Бесценно'
     }
-    return String(value) + ' синапсов'
+    return String(value) + ' синапсов '
   }
 
 	render(data: IProductItem, item: number) {

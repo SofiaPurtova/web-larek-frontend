@@ -13,7 +13,7 @@ export class Card implements ICard {
   protected _cardPrice: HTMLElement;
   protected _colors = <Record<string, string>>{
     "дополнительное": "additional",
-    "софт-скил": "soft",
+    "софт- скил": "soft",
     "кнопка": "button",
     "хард-скил": "hard",
     "другое": "other",

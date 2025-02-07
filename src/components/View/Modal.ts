@@ -37,7 +37,7 @@ export class Modal implements IModal {
   // закрытие модального окна
   close() {
     this.modalContainer.classList.remove('modal_active');
-    this.content = null; // очистка контента в модальном окне
+    this.content = null; 
     this.events.emit('modal:close');
   }
 
