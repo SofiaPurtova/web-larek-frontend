@@ -44,7 +44,7 @@ export class Basket implements IBasket {
       this.button.removeAttribute('disabled');
     } else {
       this.button.setAttribute('disabled', 'disabled');
-      this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: ' Корзина пуста' }));
+      this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' }));
     }
   }
 

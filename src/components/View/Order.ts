@@ -40,7 +40,7 @@ export class Order implements IOrder {
     });
   }
 
-  // устанавливаеn обводку вокруг выбранного метода оплаты
+  // устанавливает обводку вокруг выбранного метода оплаты
   set paymentSelection(paymentMethod: string) {
     this.buttonAll.forEach(item => {
       item.classList.toggle('button_alt-active', item.name === paymentMethod);
