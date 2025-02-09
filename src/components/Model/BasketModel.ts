@@ -13,19 +13,19 @@ export class BasketModel implements IBasketModel {
   // защищённый массив, хранит список товаров в корзине. 
   protected _basketProducts: IProductItem[];
 
-  // инициализируеn пустым массивом в конструкторе класса.
+  // инициализируем пустым массивом в конструкторе класса.
   constructor() {
     this._basketProducts = [];
   }
 
   // сеттер, позволяет устанавливать новый массив товаров в корзину
   set basketProducts(data: IProductItem[]) {
-    this._basketProducts = data;
+    this._basketProducts = data; // присваиваем переданный массив товаров защищенному свойству.
   }
 
   // геттер, возвращает текущий массив товаров в корзине
   get basketProducts() {
-    return this._basketProducts;
+    return this._basketProducts; // возвращаем текущий массив товаров
   }
 
   // количество позиций в корзине

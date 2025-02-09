@@ -24,7 +24,6 @@ export class FormModel implements IFormModel {
   items: string[];
   formErrors: FormErrors = {};
 
-  // инициализирует все свойства класса
   constructor(protected events: IEvents) {
     this.payment = '';
     this.email = '';
@@ -34,7 +33,7 @@ export class FormModel implements IFormModel {
     this.items = [];
   }
 
-  // принимает значение строки "address"
+  // принимаем значение строки "address"
   setOrderAddress(field: string, value: string) {
     if (field === 'address') {
       this.address = value;
@@ -63,7 +62,7 @@ export class FormModel implements IFormModel {
     return Object.keys(errors).length === 0;
   }
 
-  // принимает значение данных строк "Email" и "Телефон"
+  // принимаем значение данных строк "Email" и "Телефон"
   setOrderData(field: string, value: string) {
     if (field === 'email') {
       this.email = value;
@@ -103,7 +102,6 @@ export class FormModel implements IFormModel {
     return Object.keys(errors).length === 0;
   }
 
-  // Возвращает объект с полными данными заказа
   getOrderLot() {
     return {
       payment: this.payment,
