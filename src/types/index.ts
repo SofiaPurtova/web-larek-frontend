@@ -33,21 +33,6 @@ export interface IOrderResult {
   id: string;
   total: number;
 }
-
-export interface IOrderModel {
-  payment: string;
-  email: string;
-  phone: string;
-  address: string;
-  total: number;
-  items: string[];
-  setWayOfPayment(): void;
-  setAddress(field: string, value: string): void;
-  validateAddress(): boolean;
-  setEmailAndTelephone(field: string, value: string): void;
-  validateEmailAndTelephone(): boolean;
-  getReadyOrder(): IOrder;
-}
   
 // тип ошибки формы (взято из ono-tebe-nado-oop)
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
