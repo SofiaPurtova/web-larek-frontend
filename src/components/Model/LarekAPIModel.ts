@@ -3,7 +3,7 @@ import { IOrder, IOrderResult } from "../../types";
 import { Api, ApiListResponse } from "../base/api";
 
 export interface IAPIModel {
-    link: string;
+    cdn: string;
     items: IProductItem[];
     getProductCards(): Promise<IProductItem[]>;
     postOrder(order: IOrder): Promise<IOrderResult>;
@@ -13,16 +13,26 @@ export interface IAPIModel {
 // Необходимо: 
 // - отправлять запросы на на сервер чтобы получить карточки и оформить заказ 
 export class LarekAPIModel extends Api {
-    link: string;
+    cdn: string;
     items: IProductItem[];
 
-    constructor(link: string, baseUrl: string, options?: RequestInit) {
-        super(baseUrl, options); 
+    constructor(cdn: string, baseUrl: string, options?: RequestInit) {
+        super(baseUrl, options);
+        this.cdn = cdn;
     }
 
     // получаем массив объектов(карточек) с сервера
-  getProductCards(): Promise<IProductItem[]> {}
+  getProductCards(): Promise<IProductItem[]> {
+    return this.get('/product').then((data: ApiListResponse<IProductItem>) =>
+      data.items.map((item) => ({
+        ...item,
+        image: this.cdn + item.image,
+      }))
+    );
+  }
 
   // получаем ответ от сервера по сделанному заказу
-  postOrder(order: IOrder): Promise<IOrderResult> {}
+  postOrder(order: IOrder): Promise<IOrderResult> {
+    return this.post(`/order`, order).then((data: IOrderResult) => data);
+  }
 }

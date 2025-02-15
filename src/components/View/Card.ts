@@ -27,7 +27,7 @@ export interface ICard {
 export class Card extends Component<IProductItem> {
     // Это все интерактивные элементы, т.е. для каждой карточки свои значения,
     // поэтому нужны сеттеры
-    protected button: HTMLButtonElement;
+    //protected button: HTMLButtonElement;
     protected cardCategory: HTMLElement;
     protected cardTitle: HTMLElement;
     protected cardImage: HTMLImageElement;
@@ -36,13 +36,13 @@ export class Card extends Component<IProductItem> {
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
-        this.button = container.querySelector('.gallery__item');
-        this.cardCategory = this.button.querySelector('.card__category');
-        this.cardTitle = this.button.querySelector('.card__title');
-        this.cardImage = this.button.querySelector('.card__image');
-        this.cardPrice = this.button.querySelector('.card__price');
+        //this.button = ensureElement('.card', this.container) as HTMLButtonElement;
+        this.cardCategory = ensureElement('.card__category', this.container) as HTMLElement;
+        this.cardTitle = ensureElement('.card__title', this.container) as HTMLElement;
+        this.cardImage = ensureElement('.card__image', this.container) as HTMLImageElement;
+        this.cardPrice = ensureElement('.card__price', this.container) as HTMLElement;
         
-        this.button.addEventListener('click', () => this.events.emit('product:open', {id: this.id}));
+        this.container.addEventListener('click', () => this.events.emit('product:open', {id: this.id}));
     }
 
     set category(value: string) {
@@ -53,7 +53,10 @@ export class Card extends Component<IProductItem> {
         this.setText(this.cardTitle, value);
     }
     
-    set image(value: number) {}
+    set image(value: string) {
+        this.cardImage.src = value;
+        this.cardImage.alt = this.title;
+    }
 
     set price(value: string) {
         this.setText(this.cardPrice, `${value} синапсов`);

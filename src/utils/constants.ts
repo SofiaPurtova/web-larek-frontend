@@ -21,8 +21,8 @@ export const pr = [
         "title": "HEX-леденец",
         "category": "другое",
         "price": 1450
-    }
-    /*{
+    },
+    {
         "id": "b06cde61-912f-4663-9751-09956c0eed67",
         "description": "Будет стоять над душой и не давать прокрастинировать.",
         "image": "/Asterisk_2.svg",
@@ -85,5 +85,4 @@ export const pr = [
         "title": "Бэкенд-антистресс",
         "category": "другое",
         "price": 1000
-    }*/
-]
+    }]
