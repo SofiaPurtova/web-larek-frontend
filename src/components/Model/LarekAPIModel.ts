@@ -18,21 +18,11 @@ export class LarekAPIModel extends Api {
 
     constructor(link: string, baseUrl: string, options?: RequestInit) {
         super(baseUrl, options); 
-        this.link = link;  // не понимаю, что это
     }
 
     // получаем массив объектов(карточек) с сервера
-  getProductCards(): Promise<IProductItem[]> {
-    return this.get('/product').then((data: ApiListResponse<IProductItem>) =>
-      data.items.map((item) => ({
-        ...item,
-        image: this.link + item.image,
-      }))
-    );
-  }
+  getProductCards(): Promise<IProductItem[]> {}
 
   // получаем ответ от сервера по сделанному заказу
-  postOrder(order: IOrder): Promise<IOrderResult> {
-    return this.post(`/order`, order).then((data: IOrderResult) => data);
-  }
+  postOrder(order: IOrder): Promise<IOrderResult> {}
 }
