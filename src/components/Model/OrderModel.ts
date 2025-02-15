@@ -12,8 +12,8 @@ export interface IOrderModel {
     address: string;
     total: number;
     items: string[];
-    setWayOfPayment(): void;
-    validateWayOfPayment(): boolean;
+    // setWayOfPayment(): void; с данными, вроде, ничего не происходит в таком случае
+    // validateWayOfPayment(): boolean;
     setAddress(field: string, value: string): void;
     validateAddress(): boolean;
     setEmailAndTelephone(field: string, value: string): void;
@@ -31,8 +31,8 @@ export class OrderModel implements IOrderModel {
     
     constructor() {}
 
-    setWayOfPayment(): void {}
-    validateWayOfPayment(): boolean {}
+    //setWayOfPayment(): void {}
+    //validateWayOfPayment(): boolean {}
 
     setAddress(field: string, value: string): void {}
     validateAddress(): boolean {}

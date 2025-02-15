@@ -2,7 +2,7 @@ import {Component} from "../base/Component";
 import {ensureElement} from "../../utils/utils";
 import {IEvents} from "../base/events";
 
-// взято из канонического решения ono-tebe-nado
+// взято из канонического решения ono-tebe-nado, т.к. работает так же
 
 interface IModalData {
     content: HTMLElement;

@@ -1,27 +1,30 @@
-import { IProductItem, IBasket } from "../../types";
+import { IProductItem } from "../../types";
 
 // Модель главной страницы ларька. Необходимо:
 // - ввыводить карточки
 // - открывать модальное окно карточки
 // - открывать модальное окно корзины
 export interface ILarekModel {
-    products: IProductItem[];
-    openModal(data: IProductItem): IProductItem;
-    openBasket(): IBasket;
+    setProducts(products: IProductItem[]): IProductItem[];
+    getProducts(): IProductItem[];
+    getProduct(id: string): IProductItem;
 }
 
 export class LarekModel implements ILarekModel {
-    protected _products: IProductItem[];
+    protected productCards: IProductItem[] = [];
 
-    constructor() {
-        this._products = [];
+    constructor() {}
+
+    setProducts(products: IProductItem[]): IProductItem[] {
+        this.productCards = products;
     }
 
-    set products(data: IProductItem): IProductItem[] {}
+    getProducts(): IProductItem[] {
+        return this.productCards;
+    }
 
-    get products(): IProductItem[] {}
+    getProduct(id: string): IProductItem {
+        return this.productCards.find(product => product.id === id);
+    }
 
-    openModal(data: IProductItem): IProductItem {} 
-
-    openBasket(): IBasket {} 
 }
