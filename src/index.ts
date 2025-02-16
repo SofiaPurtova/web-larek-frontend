@@ -8,72 +8,63 @@ import { IProductItem } from './types';
 import { pr } from './utils/constants';
 import { cloneTemplate } from './utils/utils';
 import { API_URL, CDN_URL } from './utils/constants';
+import { Page } from './components/View/Page';
 
 
 const events = new EventEmitter();
-const mod = new LarekModel(events);
+const larekModel = new LarekModel(events);
+const basket = new BasketModel(events);
+const page = new Page(document.querySelector('.page__wrapper'), events);
 
 const api = new LarekAPIModel(CDN_URL, API_URL);
-
-api.getProductCards()
-    .then(function(data: IProductItem[]) {
-        mod.setProducts(data);
-        console.log(mod);
-    })
-    .catch(err => console.log(err));
-
 const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const gallery = document.querySelector('.gallery') as HTMLElement;
 
-/*const card1 = new Card(cloneTemplate(cardTemplate), events);
 
-card1.category = 'софт-скил';
-card1.image = '/5_Dots.svg';
-card1.price = String(750);
-card1.title = '+1 час в сутках';
-{
-        "id": "854cef69-976d-4c2a-a18c-2aa45046c390",
-        "description": "Если планируете решать задачи в тренажёре, берите два.",
-        "image": "/5_Dots.svg",
-        "title": "+1 час в сутках",
-        "category": "софт-скил",
-        "price": 750
-    } */
+api.getProductCards()
+    .then(function(data: IProductItem[]) {
+        larekModel.setProducts(data);
+        console.log(larekModel);
+        console.log('флаг');
+    })
+    .catch(err => console.log(err));
 
-//gallery.append(card1.render());
+events.on('products:changed', () => {
+    const cardsHTML = larekModel.getProducts().map(card => new Card(cloneTemplate(cardTemplate), events).render(card));
+    page.render({
+        gallery: cardsHTML,
+        counter: basket.getCounter()
+    })
+})
 
-/*mod.getProducts().forEach((pr) => {
-    const i = new Card(cloneTemplate(cardTemplate), events);
-    i.category = pr.category;
-    i.image = pr.image;
-    i.price = String(pr.price);
-    i.title = pr.title;
-    gallery.append(i.render());
-})*/
-
-//const k = mod.getProduct('412bcf81-7e75-4e70-bdb9-d3c73c9803b7');
-//console.log(k);
-/*const cardTemplate = document.querySelector('.card-catalog') as HTMLTemplateElement;
-
-events.on('products:changed', () => {})
+/*const prs = mod.getProducts();
+prs.forEach(function(obj) {
+    console.log('флаг1');
+    const newObj = {
+        category: obj.category,
+        image: obj.image,
+        price: obj.price,
+        title: obj.title
+    }
+    gallery.append(card1.render(newObj));
+});
 
 
 
 
+const card1 = new Card(cloneTemplate(cardTemplate), events);
 
-/*const gallery = document.querySelector('.gallery') as HTMLElement;
-const card1 = new Card(cloneTemplate(cardTemplate)); // почему-то не работает, хотя все как у Сергея
-
-const obj1 = {
-    id: '412bcf81-7e75-4e70-bdb9-d3c73c9803b7', 
-    category: 'дополнительное',    
-    image: '/Soft_Flower.svg',
-    title: 'Фреймворк куки судьбы',
-    price: 2500
+/*const obj1 = {
+    category: 'софт-скил',
+    image: '/5_Dots.svg',
+    price: 759,
+    title: '+1 час в сутках'
 }
+//gallery.append(card1.render(obj1));
+ pr.forEach(function(obj) {
+    gallery.append(card1.render(obj));
+});*/
 
-gallery.append(card1.render(obj1));
-console.log(gallery);*/
 
 
 /*basket.setProducts(pr);

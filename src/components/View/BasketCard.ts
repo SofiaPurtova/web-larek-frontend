@@ -1,4 +1,4 @@
-import { Component } from "../base/Component";
+/*import { Component } from "../base/Component";
 import { EventEmitter } from "../base/events";
 
 export interface IBasketCard {
@@ -36,4 +36,4 @@ export class BasketCard extends Component<IBasketCard> {
         // ...
     }
 
-}
+}*/

@@ -28,6 +28,7 @@ export class LarekModel implements ILarekModel {
 
     setProducts(products: IProductItem[]): IProductItem[] {
         this.productCards = products;
+        this.events.emit('products:changed');
     }
 
     getProducts(): IProductItem[] {

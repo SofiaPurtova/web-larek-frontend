@@ -17,7 +17,7 @@
 */
 // есть необходимость расширить класс
 
-import { EventEmitter } from "../base/events";
+/*import { EventEmitter } from "../base/events";
 import { Card } from "./Card";
 
 export interface ICardPreview {
@@ -44,4 +44,4 @@ export class CardPreview extends Card implements ICardPreview {
     set button(data: HTMLButtonElement) {
         // ...
     }
-}
+}*/

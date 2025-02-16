@@ -52,5 +52,9 @@ export class BasketModel implements IBasketModel {
 
     setBasketProducts(products: IProductItem[]): IProductItem[] {
         this.basketProducts = products;
-    }    
+    }
+    // добавила метод для подсчета количества товаров в корзине
+    getCounter() {
+        return this.basketProducts.length;
+      }
 }

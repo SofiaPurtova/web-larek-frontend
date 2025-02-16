@@ -1,4 +1,4 @@
-import { IOrder } from "../../types";
+/*import { IOrder } from "../../types";
 
 // Модель заказа. Необходимо: 
 // - выбирать способ оплаты
@@ -41,4 +41,4 @@ export class OrderModel implements IOrderModel {
     validateEmailAndTelephone(): boolean {}
 
     getReadyOrder(): IOrder {}
-}
+}*/

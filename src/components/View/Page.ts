@@ -3,8 +3,8 @@ import { Component } from "../base/Component";
 import { EventEmitter } from "../base/events";
 
 export interface IPage {
-    gallery: HTMLElement[]; // это просто контейнер, хранящий в сего кнопки-карточки
-    basket: HTMLButtonElement;
+    gallery: HTMLElement[]; // это просто контейнер, хранящий в себе кнопки-карточки
+    //basket: HTMLButtonElement;
     counter: number;
 }
 
@@ -26,9 +26,9 @@ export class Page extends Component<IPage> implements IPage{
         this.galleryContainer.replaceChildren(...products);
     }
 
-    set basket(data: HTMLButtonElement) {
-        // ...
-    }
+    /*set basket(data: HTMLButtonElement) {
+        this.headerBasket = data;
+    } убрала сеттер, т.к. сама иконка корзины - не интерактивный элемент*/
 
     set counter(value: number) {
         this.setText(this.headerBasketCounter, value);

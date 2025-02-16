@@ -78,11 +78,11 @@ export const pr = [
         "category": "хард-скил",
         "price": 10000
     },
-    {
+    /*{
         "id": "90973ae5-285c-4b6f-a6d0-65d1d760b102",
         "description": "Сжимайте мячик, чтобы снизить стресс от тем по бэкенду.",
         "image": "/Mithosis.svg",
         "title": "Бэкенд-антистресс",
         "category": "другое",
         "price": 1000
-    }]
+    }*/]

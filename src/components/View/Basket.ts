@@ -1,4 +1,4 @@
-import { ensureElement } from "../../utils/utils";
+/*import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { EventEmitter } from "../base/events";
 
@@ -33,4 +33,4 @@ export class Basket extends Component<IBasket> {
     set summ(value: number) {
         this.setText(this.basketSumm, `${value} синапсов`);
     }
-}
+}*/
