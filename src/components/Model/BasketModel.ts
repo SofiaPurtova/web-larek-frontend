@@ -11,7 +11,7 @@ export interface IBasketModel {
     getBasketProduct(id: string): IProductItem;
     getFinalSumm(): number;
     deleteAllProducts(): void;
-    setBasketProducts(products: IProductItem[]): IProductItem[];
+    setBasketProducts(products: IProductItem[]): void;
 }
 
 export class BasketModel implements IBasketModel {  
@@ -50,7 +50,7 @@ export class BasketModel implements IBasketModel {
         this.events.emit('products:changed');
     }
 
-    setBasketProducts(products: IProductItem[]): IProductItem[] {
+    setBasketProducts(products: IProductItem[]) {
         this.basketProducts = products;
     }
     // добавила метод для подсчета количества товаров в корзине

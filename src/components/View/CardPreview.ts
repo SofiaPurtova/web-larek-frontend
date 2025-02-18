@@ -17,31 +17,28 @@
 */
 // есть необходимость расширить класс
 
-/*import { EventEmitter } from "../base/events";
+import { ensureElement } from "../../utils/utils";
+import { EventEmitter } from "../base/events";
 import { Card } from "./Card";
 
 export interface ICardPreview {
     description: HTMLElement;
-    button: HTMLButtonElement;
+    //button: HTMLButtonElement;
 }
 
-export class CardPreview extends Card implements ICardPreview {
+export class CardPreview extends Card /*implements ICardPreview*/ {
     protected cardDescription: HTMLElement;
     protected cardButton: HTMLButtonElement;
     
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
-        super(container);
-        this.cardDescription = this.container.querySelector('.card__text');
-        this.cardButton = this.container.querySelector('.card__button"');
+        super(container, events);
+        this.cardDescription = ensureElement('.card__text', this.container);
+        this.cardButton = ensureElement('.card__button', this.container) as HTMLButtonElement;
         this.cardButton.addEventListener('click', () => this.events.emit('product:intoTheBasket'));
     }
 
     set description(value: string) {
         this.setText(this.cardDescription, value);
     }
-
-    set button(data: HTMLButtonElement) {
-        // ...
-    }
-}*/
+}

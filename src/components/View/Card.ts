@@ -32,7 +32,7 @@ export class Card extends Component<IProductItem> {
     protected cardTitle: HTMLElement;
     protected cardImage: HTMLImageElement;
     protected cardPrice: HTMLElement;
-    protected id: string;
+    protected cardId: string;
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
@@ -42,7 +42,7 @@ export class Card extends Component<IProductItem> {
         this.cardImage = ensureElement('.card__image', this.container) as HTMLImageElement;
         this.cardPrice = ensureElement('.card__price', this.container) as HTMLElement;
         
-        this.container.addEventListener('click', () => this.events.emit('product:open', {id: this.id}));
+        this.container.addEventListener('click', () => this.events.emit('product:select', {id: this.cardId}));
     }
 
     set category(value: string) {

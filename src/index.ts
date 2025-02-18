@@ -6,26 +6,32 @@ import { Card } from './components/View/Card';
 import './scss/styles.scss';
 import { IProductItem } from './types';
 import { pr } from './utils/constants';
-import { cloneTemplate } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
 import { API_URL, CDN_URL } from './utils/constants';
 import { Page } from './components/View/Page';
+import { CardPreview } from './components/View/CardPreview';
+import { Modal } from './components/View/Modal';
 
 
 const events = new EventEmitter();
 const larekModel = new LarekModel(events);
 const basket = new BasketModel(events);
 const page = new Page(document.querySelector('.page__wrapper'), events);
-
 const api = new LarekAPIModel(CDN_URL, API_URL);
+const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
+
+
 const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
+const cardPreviewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
 const gallery = document.querySelector('.gallery') as HTMLElement;
+
+const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
 
 
 api.getProductCards()
     .then(function(data: IProductItem[]) {
         larekModel.setProducts(data);
         console.log(larekModel);
-        console.log('флаг');
     })
     .catch(err => console.log(err));
 
@@ -35,6 +41,14 @@ events.on('products:changed', () => {
         gallery: cardsHTML,
         counter: basket.getCounter()
     })
+})
+
+events.on('product:select', (product: IProductItem) => { larekModel.setPreview(product)});
+
+events.on('product:open', (product: IProductItem) => {  
+    cardPreview.render(product);
+    modal.render({content: cardPreview.render()});
+    console.log(typeof product);
 })
 
 /*const prs = mod.getProducts();
