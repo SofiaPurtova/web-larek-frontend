@@ -1,6 +1,6 @@
-/*import { ensureAllElements, ensureElement } from "../../utils/utils";
+import { ensureAllElements, ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
-import { EventEmitter } from "../base/events";
+import { IEvents } from "../base/events";
 
 export interface IOrder {
     paymentMethod: string;
@@ -14,25 +14,44 @@ export class Order extends Component<IOrder> {
     protected orderButton: HTMLButtonElement;
     protected formErrors: HTMLElement;
 
-    constructor(container: HTMLElement, protected events: EventEmitter) {
+    constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
-        this.orderButtons = ensureAllElements('.button_alt', this.container) as HTMLButtonElement[];
-        this.orderAddress = ensureElement('.form__input', this.container) as HTMLElement;
+        this.orderButtons = Array.from(ensureAllElements('.button_alt', this.container) as HTMLButtonElement[]);
+        this.orderAddress = ensureElement('.form', this.container) as HTMLFormElement;
         this.orderButton = ensureElement('.order__button', this.container) as HTMLButtonElement;
         this.formErrors = ensureElement('.form__errors', this.container) as HTMLElement;
-        this.orderButtons.forEach((button) => {button.addEventListener('click', () => this.events.emit('choose:payment'));});
+        
+        this.orderButtons.forEach((button) => {
+            button.addEventListener('click', () => this.events.emit('choose:payment'));
+            this.paymentMethod = button.name;
+            events.emit('paymentMethod:choose', button);
+        });
+
+        this.orderAddress.addEventListener('input', (evt: Event) => {
+            const target = evt.target as HTMLInputElement;
+            const field = target.name;
+            const value = target.value;
+            this.events.emit('order:inputAddress', { field, value});
+        })
+
+        this.orderAddress.addEventListener('submit', (evt: Event) => {
+            evt.preventDefault();
+            this.events.emit('contacts:unblock');
+        })
     }
 
     set paymentMethod(paymentMethod: string) {
-        //...
+        this.orderButtons.forEach(but => {
+            but.classList.toggle('button_alt-active', but.name === paymentMethod);
+        })
     }
-    set address(value: string) {
+    /*set address(value: string) {
         this.setText(this.orderAddress, value);
-    }
+    }*/
 
     set validation(value: boolean) {
         this.orderButton.disabled = !value;
     }
 
 
-}*/
+}

@@ -42,7 +42,7 @@ export class Card extends Component<IProductItem> {
         this.cardImage = ensureElement('.card__image', this.container) as HTMLImageElement;
         this.cardPrice = ensureElement('.card__price', this.container) as HTMLElement;
         
-        this.container.addEventListener('click', () => this.events.emit('product:select', {id: this.cardId}));
+        this.container.addEventListener('click', () => { this.events.emit('product:select', this.container) });
     }
 
     set category(value: string) {

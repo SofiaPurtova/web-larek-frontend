@@ -21,12 +21,12 @@ export class BasketModel implements IBasketModel {
 
     addProduct(product: IProductItem) {
         this.basketProducts.push(product);
-        this.events.emit('products:changed');
+        this.events.emit('basket:changed');
     }
 
     deleteProduct(id: string) {
         this.basketProducts = this.basketProducts.filter(product => product.id !== id);
-        this.events.emit('products:changed');
+        this.events.emit('basket:changed');
     }
     
     getBasketProducts(): IProductItem[] {
@@ -47,14 +47,14 @@ export class BasketModel implements IBasketModel {
 
     deleteAllProducts() {
         this.basketProducts = [];
-        this.events.emit('products:changed');
+        this.events.emit('basket:changed');
     }
 
     setBasketProducts(products: IProductItem[]) {
         this.basketProducts = products;
     }
     // добавила метод для подсчета количества товаров в корзине
-    getCounter() {
+    getCounter(): number {
         return this.basketProducts.length;
       }
 }

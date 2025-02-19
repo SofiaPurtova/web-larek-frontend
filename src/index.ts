@@ -11,21 +11,34 @@ import { API_URL, CDN_URL } from './utils/constants';
 import { Page } from './components/View/Page';
 import { CardPreview } from './components/View/CardPreview';
 import { Modal } from './components/View/Modal';
+import { Basket } from './components/View/Basket';
+import { BasketCard } from './components/View/BasketCard';
+import { Order } from './components/View/Order';
+import { OrderModel } from './components/Model/OrderModel';
+
+
+const basketTemplate = document.querySelector('#basket') as HTMLTemplateElement;
+const basketCardTemplate = document.querySelector('#card-basket') as HTMLTemplateElement;
+const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
+const cardPreviewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
+const orderTemplate = document.querySelector('#order') as HTMLTemplateElement;
+
 
 
 const events = new EventEmitter();
 const larekModel = new LarekModel(events);
-const basket = new BasketModel(events);
+const basket = new Basket(cloneTemplate(basketTemplate), events);
+const basketModel = new BasketModel(events);
 const page = new Page(document.querySelector('.page__wrapper'), events);
 const api = new LarekAPIModel(CDN_URL, API_URL);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
+const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
+const order = new Order(cloneTemplate(orderTemplate), events);
+const orderModel = new OrderModel(events);
 
 
-const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
-const cardPreviewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
 const gallery = document.querySelector('.gallery') as HTMLElement;
 
-const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
 
 
 api.getProductCards()
@@ -38,18 +51,78 @@ api.getProductCards()
 events.on('products:changed', () => {
     const cardsHTML = larekModel.getProducts().map(card => new Card(cloneTemplate(cardTemplate), events).render(card));
     page.render({
-        gallery: cardsHTML,
-        counter: basket.getCounter()
+        gallery: cardsHTML
+        //counter: basketModel.getCounter()
     })
-})
+});
 
-events.on('product:select', (product: IProductItem) => { larekModel.setPreview(product)});
+events.on('product:select', (product: IProductItem) => {
+    larekModel.setPreview(product);
+});
 
 events.on('product:open', (product: IProductItem) => {  
     cardPreview.render(product);
     modal.render({content: cardPreview.render()});
     console.log(typeof product);
+});
+
+events.on('modal:open', () => {
+    modal.lock = true;
+});
+
+events.on('modal:close', () => {
+    modal.lock = false;
+});
+
+events.on('product:addToTheBasket', () => {
+    basketModel.addProduct(larekModel.selectedCard);
+    basket.renderCounter(basketModel.getCounter());
+    modal.close;
+});
+
+//Ни в какую продукты не удаляются из корзины
+/*events.on('basket:changed', () => {
+    const basketHTML = basketModel.getBasketProducts().map(cardBask => new BasketCard(cloneTemplate(basketCardTemplate), events).render(cardBask));
+    basket.render({
+        productCards: basketHTML
+    })
+})*/ 
+
+
+events.on('basket:open', () => {
+    basket.setSumm(basketModel.getFinalSumm());
+    basket.productCards = basketModel.getBasketProducts().map((product, index) => {
+        const basketCard = new BasketCard(cloneTemplate(basketCardTemplate), events);
+        basketCard.index = index + 1;
+        return basketCard.render(product);
+    });
+    modal.render({ content: basket.render() });
+});
+
+events.on('product:delete', ({id}: {id: string}) => {
+    basketModel.deleteProduct(id);
+    basket.renderCounter(basketModel.getCounter());
+    basket.setSumm(basketModel.getFinalSumm());
+    basket.productCards = basketModel.getBasketProducts().map((product, index) => {
+        const basketCard = new BasketCard(cloneTemplate(basketCardTemplate), events);
+        basketCard.index = index + 1;
+        return basketCard.render(product);
+    });
+    modal.render({ content: basket.render() });
+});
+
+events.on('order:futherFromBasket', () => {
+    modal.content = order.render();
+    modal.render({content: order.render()});
+    orderModel.items = basketModel.getBasketProducts().map(product => product.id);
 })
+
+events.on('paymentMethod:choose', (button: HTMLButtonElement) => { orderModel.payment = button.name});
+
+
+events.on('success:close', () => {
+    modal.close();
+});
 
 /*const prs = mod.getProducts();
 prs.forEach(function(obj) {

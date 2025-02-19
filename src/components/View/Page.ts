@@ -5,18 +5,18 @@ import { EventEmitter } from "../base/events";
 export interface IPage {
     gallery: HTMLElement[]; // это просто контейнер, хранящий в себе кнопки-карточки
     //basket: HTMLButtonElement;
-    counter: number;
+    //counter: number;
 }
 
 export class Page extends Component<IPage> implements IPage{
     protected headerBasket: HTMLButtonElement;
-    protected headerBasketCounter: HTMLElement;
+    //protected headerBasketCounter: HTMLElement;
     protected galleryContainer: HTMLElement;
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
         this.headerBasket = ensureElement('.header__basket',  this.container) as HTMLButtonElement;
-        this.headerBasketCounter = this.headerBasket.querySelector('.header__basket-counter');
+        //this.headerBasketCounter = this.headerBasket.querySelector('.header__basket-counter');
         this.galleryContainer = ensureElement('.gallery') as HTMLElement;
 
         this.headerBasket.addEventListener('click', () => this.events.emit('basket:open'));
@@ -28,10 +28,10 @@ export class Page extends Component<IPage> implements IPage{
 
     /*set basket(data: HTMLButtonElement) {
         this.headerBasket = data;
-    } убрала сеттер, т.к. сама иконка корзины - не интерактивный элемент*/
+    } убрала сеттер, т.к. сама иконка корзины - не интерактивный элемент
 
     set counter(value: number) {
         this.setText(this.headerBasketCounter, value);
-    }
+    }*/
 
 }

@@ -14,6 +14,7 @@ export interface ILarekModel {
 
 export class LarekModel implements ILarekModel {
     protected productCards: IProductItem[] = [];
+    selectedCard: IProductItem;
 
     constructor(protected events: IEvents) {}
 
@@ -40,7 +41,7 @@ export class LarekModel implements ILarekModel {
     }
 
     setPreview(product: IProductItem) {
-        //this.selectedCard = data; возможно потом пригодится
+        this.selectedCard = product;
         this.events.emit('product:open', product);
     }
 }

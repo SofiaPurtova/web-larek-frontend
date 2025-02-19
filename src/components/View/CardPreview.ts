@@ -35,7 +35,7 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
         super(container, events);
         this.cardDescription = ensureElement('.card__text', this.container);
         this.cardButton = ensureElement('.card__button', this.container) as HTMLButtonElement;
-        this.cardButton.addEventListener('click', () => this.events.emit('product:intoTheBasket'));
+        this.cardButton.addEventListener('click', () => { this.events.emit('product:addToTheBasket') });
     }
 
     set description(value: string) {

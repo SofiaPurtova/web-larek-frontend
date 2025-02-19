@@ -11,6 +11,7 @@ interface IModalData {
 export class Modal extends Component<IModalData> {
     protected _closeButton: HTMLButtonElement;
     protected _content: HTMLElement;
+    protected wrapper: HTMLElement;
 
     constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
@@ -21,6 +22,8 @@ export class Modal extends Component<IModalData> {
         this._closeButton.addEventListener('click', this.close.bind(this));
         this.container.addEventListener('click', this.close.bind(this));
         this._content.addEventListener('click', (event) => event.stopPropagation());
+
+        this.wrapper = document.querySelector('.page__wrapper');
     }
 
     set content(value: HTMLElement) {
@@ -42,5 +45,13 @@ export class Modal extends Component<IModalData> {
         super.render(data);
         this.open();
         return this.container;
+    }
+
+    set lock(value: boolean) {
+        if (value) {
+            this.wrapper.classList.add('page__wrapper_locked');
+        } else {
+            this.wrapper.classList.remove('page__wrapper_locked');
+        }
     }
 }

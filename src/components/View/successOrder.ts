@@ -1,10 +1,10 @@
-/*import { ensureElement } from "../../utils/utils";
+import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { IEvents } from "../base/events";
 
 export interface ISuccessOrder {
-    dedescription: HTMLElement;
-    button: HTMLButtonElement;
+    description: HTMLElement;
+    //button: HTMLButtonElement;
 }
 
 export class SuccessOrder extends Component<ISuccessOrder> {
@@ -23,8 +23,8 @@ export class SuccessOrder extends Component<ISuccessOrder> {
         this.setText(this.successDescription, `Списано ${value} синапсов`);
     }
 
-    set button(data: HTMLButtonElement) {
+    /*set button(data: HTMLButtonElement) {
         // ...
         //this.events.emit('success:close');
-    }
-}*/
+    }*/
+}

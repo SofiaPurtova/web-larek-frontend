@@ -1,11 +1,13 @@
-/*import { Component } from "../base/Component";
-import { EventEmitter } from "../base/events";
+import { ensureElement } from "../../utils/utils";
+import { Component } from "../base/Component";
+import { IEvents } from "../base/events";
 
 export interface IBasketCard {
     index: number;
-    title: HTMLElement;
+    title: string;
     price: number;
     delete: HTMLButtonElement;
+    id: string;
 }
 
 export class BasketCard extends Component<IBasketCard> {
@@ -13,11 +15,16 @@ export class BasketCard extends Component<IBasketCard> {
     protected productTitle: HTMLElement;
     protected productPrice: HTMLElement;
     protected deleteButton: HTMLButtonElement;
+    protected cardId: string;
 
-    constructor(container: HTMLElement, protected enents: EventEmitter) {
+    constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
-        // ...
-        this.deleteButton.addEventListener('click', () => this.events.emit('product:delete', {index: this.productIndex}));
+        this.productIndex = ensureElement('.basket__item-index', this.container) as HTMLElement;
+        this.productTitle = ensureElement('.card__title', this.container) as HTMLElement;
+        this.productPrice = ensureElement('.card__price', this.container) as HTMLElement;
+        this.deleteButton = ensureElement('.basket__item-delete', this.container) as HTMLButtonElement;
+
+        this.deleteButton.addEventListener('click', () => this.events.emit('product:delete', {index: this.cardId}));
     }
 
     set index(value: number) {
@@ -32,8 +39,12 @@ export class BasketCard extends Component<IBasketCard> {
         this.setText(this.productPrice, `${value} синапсов`);
     }
 
-    set button(data: HTMLButtonElement) {
+    /*set button(data: HTMLButtonElement) {
         // ...
+    }*/
+
+    set id(value: string) {
+        this.id = value;
     }
 
-}*/
+}

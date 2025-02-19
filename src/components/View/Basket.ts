@@ -1,11 +1,11 @@
-/*import { ensureElement } from "../../utils/utils";
+import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
-import { EventEmitter } from "../base/events";
+import { IEvents } from "../base/events";
 
 export interface IBasket {
     productCards: HTMLElement[];
-    button: HTMLButtonElement;
-    summ: number;
+    //button: HTMLButtonElement;
+    //setSumm(): HTMLElement;
 }
 
 export class Basket extends Component<IBasket> {
@@ -13,24 +13,35 @@ export class Basket extends Component<IBasket> {
     protected basketButton: HTMLButtonElement;
     protected basketSumm: HTMLElement;
 
-    constructor(container: HTMLElement, protected events: EventEmitter) {
+    protected headerBasket: HTMLElement;
+    protected basketCounter: HTMLElement;
+
+    constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
         this.basketList = ensureElement('.basket__list', this.container) as HTMLElement;
         this.basketButton = ensureElement('.basket__button', this.container) as HTMLButtonElement;
         this.basketSumm = ensureElement('.basket__price', this.container) as HTMLElement;
 
-        this.basketButton.addEventListener('click', () => this.events.emit('order:futher');
+        this.headerBasket = document.querySelector('.header__basket');
+        this.basketCounter = document.querySelector('.header__basket-counter');
+
+        this.headerBasket.addEventListener('click', () => this.events.emit('basket:open'));
+        this.basketButton.addEventListener('click', () => this.events.emit('order:futherFromBasket'));
     }
 
     set productCards(products: HTMLElement[]) {
         this.basketList.replaceChildren(...products);
     }
 
-    set button(data: HTMLButtonElement) {
+    /*set button(data: HTMLButtonElement) {
         // ...
-    }
+    }*/
 
-    set summ(value: number) {
+    setSumm(value: number) {
         this.setText(this.basketSumm, `${value} синапсов`);
     }
-}*/
+
+    renderCounter(value: number) {
+        this.setText(this.basketCounter, value);
+    }
+}
