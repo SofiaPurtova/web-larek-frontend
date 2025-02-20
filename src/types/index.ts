@@ -29,6 +29,15 @@ export interface IOrder extends IOrderForm {
   items: string[]
 }
 
+export interface IReadyOrder {
+  payment: string;
+  email: string;
+  phone: string;
+  address: string;
+  total: number;
+  items: string[];
+}
+
 export interface IOrderResult {
   id: string;
   total: number;

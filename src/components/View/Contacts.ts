@@ -1,4 +1,4 @@
-/*import { ensureAllElements, ensureElement } from "../../utils/utils";
+import { ensureAllElements, ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { EventEmitter } from "../base/events";
 
@@ -8,30 +8,42 @@ export interface IOrder {
     formErrors: HTMLElement;
 }
 
-export class Order extends Component<IOrder> {
-    protected inputs: HTMLInputElement[];
+export class Contacts extends Component<IOrder> {
+    protected inputs: HTMLElement[];
     protected orderButton: HTMLButtonElement;
-    protected formErrors: HTMLElement;
+    protected contactsForm: HTMLElement;
+    formErrors: HTMLElement;
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container);
-        this.inputs = ensureAllElements('.form__input') as HTMLElement[];
+        this.contactsForm = this.container;
+        this.inputs = Array.from(ensureAllElements('.form__input', this.container) as HTMLElement[]);
         this.orderButton = ensureElement('.button', this.container) as HTMLButtonElement;
         this.formErrors = ensureElement('.form__errors', this.container) as HTMLElement;
 
-        this.inputs.forEach((input) => {
-            input.addEventListener('input', () => this.events.emit('contacts:change'))
-        })
-        this.orderButton.addEventListener('click', () => this.events.emit('success:open'));
+        this.inputs.forEach(fiel => {
+            fiel.addEventListener('input', (evt) => {
+                const target = evt.target as HTMLInputElement;
+                const field = target.name;
+                const value = target.value;
+                this.events.emit('contacts:change', { field, value });
+                console.log('miiiis');
+            });
+        });
+
+        this.contactsForm.addEventListener('submit', (evt: Event) => {
+            evt.preventDefault();
+            this.events.emit('success:open');
+        });
     }
 
-    set inputFields(value: string) {
+    /*set inputFields(value: string) {
         // ...
-    }
+    }*/
 
     set validation(value: boolean) {
         this.orderButton.disabled = !value;
     }
 
 
-}*/
+}

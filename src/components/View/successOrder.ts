@@ -4,22 +4,24 @@ import { IEvents } from "../base/events";
 
 export interface ISuccessOrder {
     description: HTMLElement;
-    //button: HTMLButtonElement;
+    button: HTMLButtonElement;
 }
 
 export class SuccessOrder extends Component<ISuccessOrder> {
     protected successDescription: HTMLElement;
     protected successButton: HTMLButtonElement;
+    protected successForm: HTMLElement;
 
     constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
-        this.successDescription = ensureElement('.oreder-success__description', this.container) as HTMLElement;
+        this.successForm = this.container;
+        this.successDescription = ensureElement('.order-success__description', this.container) as HTMLElement;
         this.successButton = ensureElement('.order-success__close', this.container) as HTMLButtonElement;
 
         this.successButton.addEventListener('click', () => this.events.emit('success:close'));
     }
 
-    set description(value: number) {
+    setDescription(value: number) {
         this.setText(this.successDescription, `Списано ${value} синапсов`);
     }
 

@@ -4,7 +4,7 @@ import { LarekAPIModel } from './components/Model/LarekAPIModel';
 import { LarekModel } from './components/Model/LarekModel';
 import { Card } from './components/View/Card';
 import './scss/styles.scss';
-import { IProductItem } from './types';
+import { IOrderForm, IProductItem } from './types';
 import { pr } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { API_URL, CDN_URL } from './utils/constants';
@@ -15,6 +15,8 @@ import { Basket } from './components/View/Basket';
 import { BasketCard } from './components/View/BasketCard';
 import { Order } from './components/View/Order';
 import { OrderModel } from './components/Model/OrderModel';
+import { Contacts } from './components/View/Contacts';
+import { SuccessOrder } from './components/View/SuccessOrder';
 
 
 const basketTemplate = document.querySelector('#basket') as HTMLTemplateElement;
@@ -22,8 +24,8 @@ const basketCardTemplate = document.querySelector('#card-basket') as HTMLTemplat
 const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const cardPreviewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
 const orderTemplate = document.querySelector('#order') as HTMLTemplateElement;
-
-
+const contactsTemplate = document.querySelector('#contacts') as HTMLTemplateElement;
+const succesTemplate = document.querySelector('#success') as HTMLTemplateElement;
 
 const api = new LarekAPIModel(CDN_URL, API_URL);
 const events = new EventEmitter();
@@ -35,7 +37,7 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
 const orderModel = new OrderModel(events);
-
+const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
 const gallery = document.querySelector('.gallery') as HTMLElement;
 
@@ -63,7 +65,7 @@ events.on('product:select', ({id}: {id: string}) => {
 
 events.on('product:open', /*(product: IProductItem)*/({id}: {id: string}) => {  
     cardPreview.render(/*product*/larekModel.getProduct(id));
-    cardPreview.renderValue(larekModel.getProduct(id));
+    //cardPreview.renderValue(larekModel.getProduct(id));
     modal.render({content: cardPreview.render()});
     console.log(typeof /*product*/larekModel.getProduct(id));
 });
@@ -78,7 +80,7 @@ events.on('modal:close', () => {
 
 events.on('product:addToTheBasket', ({id}: {id: string}) => {
     basketModel.addProduct(larekModel.getProduct(id));
-    console.log(basketModel.getBasketProducts())
+    //console.log(basketModel.getBasketProducts())
     basket.renderCounter(basketModel.getCounter());
     modal.close;
 });
@@ -118,10 +120,54 @@ events.on('order:futherFromBasket', () => {
     modal.content = order.render();
     modal.render({content: order.render()});
     orderModel.items = basketModel.getBasketProducts().map(product => product.id);
-})
+});
 
 events.on('paymentMethod:choose', (button: HTMLButtonElement) => { orderModel.payment = button.name});
 
+events.on('order:inputAddress', (inf: {field: string, value: string}) => {
+    orderModel.setAddress(inf.field, inf.value);
+});
+
+events.on('formErrors:address', (err: Partial<IOrderForm>) => {
+    const {address, payment} = err;
+    order.validation = !address && !payment;
+    order.formErrors.textContent = Object.values({address, payment}).filter(i => !!i).join('; ');
+    
+});
+
+events.on('contacts:unblock', () => {
+    orderModel.total = basketModel.getFinalSumm();
+    modal.content = contacts.render();
+    modal.render({content: contacts.render()});
+    console.log('lookig next');
+});
+
+events.on('contacts:change', (data: {field: string, value: string}) => {
+    orderModel.setEmailAndTelephone(data.field, data.value);
+    console.log('mistake here');
+});
+
+events.on('formErrors:emailAndTelephone', (err: Partial<IOrderForm>) => {
+    console.log('mistale here');
+    const { email, phone} = err;
+    contacts.validation = !email && !phone;
+    contacts.formErrors.textContent = Object.values({phone, email}).filter(i => !!i).join('; ');
+});
+
+events.on('success:open', () => {
+    api.postOrder(orderModel.getReadyOrder())
+    .then((data) => {
+        console.log(data);
+        const success = new SuccessOrder(cloneTemplate(succesTemplate), events);
+        success.setDescription(basketModel.getFinalSumm());
+        modal.content = success.render();
+        //modal.render({content: success.render()});
+        basketModel.deleteAllProducts();
+        basket.renderCounter(basketModel.getCounter());
+        modal.render({content: success.render()});
+    })
+    .catch(err => console.log(err));
+})
 
 events.on('success:close', () => {
     modal.close();

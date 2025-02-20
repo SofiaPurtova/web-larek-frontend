@@ -30,6 +30,7 @@ export interface ICardPreview {
 
 export class CardPreview extends Card /*implements ICardPreview*/ {
     protected cardDescription: HTMLElement;
+    //protected cardPrice: HTMLElement;
     protected cardButton: HTMLButtonElement;
     protected cardId: string;
 
@@ -37,6 +38,7 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
         super(container, events);
         this.cardDescription = ensureElement('.card__text', this.container);
         this.cardButton = ensureElement('.card__button', this.container) as HTMLButtonElement;
+        //this.cardPrice = ensureElement('.card__price', this.container) as HTMLElement;
 
         this.cardButton.addEventListener('click', () => { this.events.emit('product:addToTheBasket', {id: this.cardId})});
     }
@@ -49,7 +51,7 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
         this.cardId = value;
     }
 
-    abilityToBuy(product: IProductItem) {
+    /*abilityToBuy(product: IProductItem) {
         if (product.price) {
             return 'Купить'
         } else {
@@ -60,5 +62,5 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
 
     renderValue(product: IProductItem) {
         this.cardButton.textContent = this.abilityToBuy(product);
-    }
+    }*/
 }

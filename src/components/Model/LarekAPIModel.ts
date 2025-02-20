@@ -1,4 +1,4 @@
-import { IProductItem } from "../../types";
+import { IProductItem, IReadyOrder } from "../../types";
 import { IOrder, IOrderResult } from "../../types";
 import { Api, ApiListResponse } from "../base/api";
 
@@ -32,7 +32,7 @@ export class LarekAPIModel extends Api {
   }
 
   // получаем ответ от сервера по сделанному заказу
-  postOrder(order: IOrder): Promise<IOrderResult> {
+  postOrder(order: IReadyOrder): Promise<IOrderResult> {
     return this.post(`/order`, order).then((data: IOrderResult) => data);
   }
 }

@@ -1,4 +1,4 @@
-import { FormErrors, IOrder } from "../../types";
+import { FormErrors, IOrder, IReadyOrder } from "../../types";
 import { IEvents } from "../base/events";
 
 // Модель заказа. Необходимо: 
@@ -17,9 +17,11 @@ export interface IOrderModel {
     // validateWayOfPayment(): boolean;
     setAddress(field: string, value: string): void;
     validateAddress(): boolean;
+
     setEmailAndTelephone(field: string, value: string): void;
     validateEmailAndTelephone(): boolean;
-    getReadyOrder(): object;
+
+    getReadyOrder(): IReadyOrder;
   }
 
 export class OrderModel implements IOrderModel {
@@ -43,7 +45,7 @@ export class OrderModel implements IOrderModel {
     //setWayOfPayment(): void {}
     //validateWayOfPayment(): boolean {}
 
-    setAddress(field: string, value: string): void {
+    setAddress(field: string, value: string) {
       if (field === 'address') {
         this.address = value;
       }
@@ -70,7 +72,7 @@ export class OrderModel implements IOrderModel {
       return Object.keys(errors).length === 0;
   }
 
-    setEmailAndTelephone(field: string, value: string): void {
+    setEmailAndTelephone(field: string, value: string) {
       if (field === 'email') {
         this.email = value;
       } else if (field === 'phone') {
@@ -83,8 +85,8 @@ export class OrderModel implements IOrderModel {
     }
 
     validateEmailAndTelephone(): boolean {
-      const regexpEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      const regexpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/;
+      const regexpEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const regexpPhone = /^(\+7|8)?\s*\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$/;
       const errors: typeof this.formErrors = {};
 
       if (!this.email) {
@@ -104,18 +106,18 @@ export class OrderModel implements IOrderModel {
       }
 
       this.formErrors = errors;
-      this.events.emit('formErrors:change', this.formErrors);
+      this.events.emit('formErrors:emailAndTelephone', this.formErrors);
       return Object.keys(errors).length === 0;
   }
 
-    getReadyOrder(): object {
+    getReadyOrder(): IReadyOrder {
       return {
         payment: this.payment,
         email: this.email,
         phone: this.phone,
         address: this.address,
         total: this.total,
-        items: this.items
+        items: this.items,
       }
     }
 }
