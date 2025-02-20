@@ -39,8 +39,15 @@ export class BasketModel implements IBasketModel {
 
     getFinalSumm(): number {
         let tempSumm = 0;
+        
         this.basketProducts.forEach(product=> {
-            tempSumm = tempSumm + product.price;
+            if (product && product.price) {
+                tempSumm = tempSumm + product.price;
+                console.log(product.price);
+             } else {
+                console.log('Объект не инициализирован или не содержит свойство price');
+             }
+            //tempSumm = tempSumm + product.price;
         });
         return tempSumm;
     }

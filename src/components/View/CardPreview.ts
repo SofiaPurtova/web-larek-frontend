@@ -24,21 +24,27 @@ import { Card } from "./Card";
 export interface ICardPreview {
     description: HTMLElement;
     //button: HTMLButtonElement;
+    previewId: string;
 }
 
 export class CardPreview extends Card /*implements ICardPreview*/ {
     protected cardDescription: HTMLElement;
     protected cardButton: HTMLButtonElement;
-    
+    protected cardId: string;
 
     constructor(container: HTMLElement, protected events: EventEmitter) {
         super(container, events);
         this.cardDescription = ensureElement('.card__text', this.container);
         this.cardButton = ensureElement('.card__button', this.container) as HTMLButtonElement;
-        this.cardButton.addEventListener('click', () => { this.events.emit('product:addToTheBasket') });
+
+        this.cardButton.addEventListener('click', () => { this.events.emit('product:addToTheBasket', {id: this.cardId})});
     }
 
     set description(value: string) {
         this.setText(this.cardDescription, value);
+    }
+
+    set id(value: string) {
+        this.cardId = value;
     }
 }

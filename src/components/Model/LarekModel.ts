@@ -42,6 +42,6 @@ export class LarekModel implements ILarekModel {
 
     setPreview(product: IProductItem) {
         this.selectedCard = product;
-        this.events.emit('product:open', product);
+        this.events.emit('product:open', /*product*/ {id: product.id});
     }
 }

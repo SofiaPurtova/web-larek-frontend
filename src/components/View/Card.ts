@@ -22,6 +22,7 @@ export interface ICard {
     image: HTMLElement;
     price: HTMLElement;
     render(data: Partial<IProductItem>): HTMLElement;
+    id: string;
 }
 
 export class Card extends Component<IProductItem> {
@@ -42,7 +43,7 @@ export class Card extends Component<IProductItem> {
         this.cardImage = ensureElement('.card__image', this.container) as HTMLImageElement;
         this.cardPrice = ensureElement('.card__price', this.container) as HTMLElement;
         
-        this.container.addEventListener('click', () => { this.events.emit('product:select', this.container) });
+        this.container.addEventListener('click', () => { this.events.emit('product:select', /*this.container*/{id: this.cardId}) });
     }
 
     set category(value: string) {
@@ -60,5 +61,10 @@ export class Card extends Component<IProductItem> {
 
     set price(value: string) {
         this.setText(this.cardPrice, `${value} синапсов`);
+    }
+
+    // сейчас попробуем (все айдишники в случае чего - убрать)
+    set id(value: string) {
+        this.cardId = value;
     }
 }

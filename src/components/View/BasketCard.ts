@@ -24,7 +24,7 @@ export class BasketCard extends Component<IBasketCard> {
         this.productPrice = ensureElement('.card__price', this.container) as HTMLElement;
         this.deleteButton = ensureElement('.basket__item-delete', this.container) as HTMLButtonElement;
 
-        this.deleteButton.addEventListener('click', () => this.events.emit('product:delete', {index: this.cardId}));
+        this.deleteButton.addEventListener('click', () => this.events.emit('product:delete', {id: this.cardId}));
     }
 
     set index(value: number) {
@@ -44,7 +44,7 @@ export class BasketCard extends Component<IBasketCard> {
     }*/
 
     set id(value: string) {
-        this.id = value;
+        this.cardId = value;
     }
 
 }

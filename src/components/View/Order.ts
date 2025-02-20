@@ -17,7 +17,7 @@ export class Order extends Component<IOrder> {
     constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
         this.orderButtons = Array.from(ensureAllElements('.button_alt', this.container) as HTMLButtonElement[]);
-        this.orderAddress = ensureElement('.form', this.container) as HTMLFormElement;
+        this.orderAddress = this.container;//ensureElement('.form', this.container) as HTMLFormElement;
         this.orderButton = ensureElement('.order__button', this.container) as HTMLButtonElement;
         this.formErrors = ensureElement('.form__errors', this.container) as HTMLElement;
         

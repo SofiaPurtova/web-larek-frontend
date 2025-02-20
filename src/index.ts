@@ -25,12 +25,12 @@ const orderTemplate = document.querySelector('#order') as HTMLTemplateElement;
 
 
 
+const api = new LarekAPIModel(CDN_URL, API_URL);
 const events = new EventEmitter();
 const larekModel = new LarekModel(events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const basketModel = new BasketModel(events);
 const page = new Page(document.querySelector('.page__wrapper'), events);
-const api = new LarekAPIModel(CDN_URL, API_URL);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
@@ -56,14 +56,15 @@ events.on('products:changed', () => {
     })
 });
 
-events.on('product:select', (product: IProductItem) => {
-    larekModel.setPreview(product);
+events.on('product:select', ({id}: {id: string}) => {
+    larekModel.setPreview(larekModel.getProduct(id));
+    //larekModel.setPreview(product);
 });
 
-events.on('product:open', (product: IProductItem) => {  
-    cardPreview.render(product);
+events.on('product:open', /*(product: IProductItem)*/({id}: {id: string}) => {  
+    cardPreview.render(/*product*/larekModel.getProduct(id));
     modal.render({content: cardPreview.render()});
-    console.log(typeof product);
+    console.log(typeof /*product*/larekModel.getProduct(id));
 });
 
 events.on('modal:open', () => {
@@ -74,8 +75,9 @@ events.on('modal:close', () => {
     modal.lock = false;
 });
 
-events.on('product:addToTheBasket', () => {
-    basketModel.addProduct(larekModel.selectedCard);
+events.on('product:addToTheBasket', ({id}: {id: string}) => {
+    basketModel.addProduct(larekModel.getProduct(id));
+    console.log(basketModel.getBasketProducts())
     basket.renderCounter(basketModel.getCounter());
     modal.close;
 });
