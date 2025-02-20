@@ -1,7 +1,7 @@
 import { IProductItem } from "../../types";
 import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
-import { EventEmitter, IEvents } from "../base/events";
+import { IEvents } from "../base/events";
 
 
 /* 
@@ -35,7 +35,7 @@ export class Card extends Component<IProductItem> {
     protected cardPrice: HTMLElement;
     protected cardId: string;
 
-    constructor(container: HTMLElement, protected events: EventEmitter) {
+    constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
         //this.button = ensureElement('.card', this.container) as HTMLButtonElement;
         this.cardCategory = ensureElement('.card__category', this.container) as HTMLElement;
@@ -59,8 +59,12 @@ export class Card extends Component<IProductItem> {
         this.cardImage.alt = this.title;
     }
 
-    set price(value: string) {
-        this.setText(this.cardPrice, `${value} синапсов`);
+    set price(value: string | null) {
+        if (value === null) {
+            this.setText(this.cardPrice, 'Бесценно');
+        } else {
+            this.setText(this.cardPrice, `${value} синапсов`);
+        }
     }
 
     // сейчас попробуем (все айдишники в случае чего - убрать)

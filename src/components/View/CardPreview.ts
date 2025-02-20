@@ -17,6 +17,7 @@
 */
 // есть необходимость расширить класс
 
+import { IProductItem } from "../../types";
 import { ensureElement } from "../../utils/utils";
 import { EventEmitter } from "../base/events";
 import { Card } from "./Card";
@@ -46,5 +47,18 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
 
     set id(value: string) {
         this.cardId = value;
+    }
+
+    abilityToBuy(product: IProductItem) {
+        if (product.price) {
+            return 'Купить'
+        } else {
+            this.cardButton.setAttribute('disabled', 'true');
+            return 'Не продаётся';
+        }
+    }
+
+    renderValue(product: IProductItem) {
+        this.cardButton.textContent = this.abilityToBuy(product);
     }
 }

@@ -63,6 +63,7 @@ events.on('product:select', ({id}: {id: string}) => {
 
 events.on('product:open', /*(product: IProductItem)*/({id}: {id: string}) => {  
     cardPreview.render(/*product*/larekModel.getProduct(id));
+    cardPreview.renderValue(larekModel.getProduct(id));
     modal.render({content: cardPreview.render()});
     console.log(typeof /*product*/larekModel.getProduct(id));
 });
