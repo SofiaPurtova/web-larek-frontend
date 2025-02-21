@@ -164,7 +164,7 @@ events.on('formErrors:emailAndTelephone', (err: Partial<IOrderForm>) => {
 events.on('success:open', () => {
     api.postOrder(orderModel.getReadyOrder())
     .then((data) => {
-        console.log(data);
+        //console.log(data);
         const success = new SuccessOrder(cloneTemplate(succesTemplate), events);
         success.setDescription(basketModel.getFinalSumm());
         modal.content = success.render();

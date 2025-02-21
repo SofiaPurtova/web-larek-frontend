@@ -54,7 +54,7 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
     setTextForButton(id: string, text: string) {
         if (this.cardId === id) {
             this.cardButton.textContent = text;
-        } else { console.log('error')}
+        }
     }
 
     abilityToBuy(product: IProductItem) {
