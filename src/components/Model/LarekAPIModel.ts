@@ -9,9 +9,6 @@ export interface IAPIModel {
     postOrder(order: IOrder): Promise<IOrderResult>;
 }
 
-// класс наследуется от Api для того, что можно было использовать родительские свойства и методы 
-// Необходимо: 
-// - отправлять запросы на на сервер чтобы получить карточки и оформить заказ 
 export class LarekAPIModel extends Api {
     cdn: string;
     items: IProductItem[];

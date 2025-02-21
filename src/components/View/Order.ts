@@ -49,13 +49,8 @@ export class Order extends Component<IOrder> {
             but.classList.toggle('button_alt-active', but.name === payMethod);
         })
     }
-    /*set address(value: string) {
-        this.setText(this.orderAddress, value);
-    }*/
 
     set validation(value: boolean) {
         this.orderButton.disabled = !value;
     }
-
-
 }

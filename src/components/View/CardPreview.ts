@@ -40,7 +40,7 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
         this.cardButton = ensureElement('.card__button', this.container) as HTMLButtonElement;
         //this.cardPrice = ensureElement('.card__price', this.container) as HTMLElement;
 
-        this.cardButton.addEventListener('click', () => { this.events.emit('product:addToTheBasket', {id: this.cardId})});
+        this.cardButton.addEventListener('click', () => { this.events.emit('product:clickButton', {id: this.cardId})});
     }
 
     set description(value: string) {
@@ -51,8 +51,15 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
         this.cardId = value;
     }
 
-    /*abilityToBuy(product: IProductItem) {
-        if (product.price) {
+    setTextForButton(id: string, text: string) {
+        if (this.cardId === id) {
+            this.cardButton.textContent = text;
+        } else { console.log('error')}
+    }
+
+    abilityToBuy(product: IProductItem) {
+        if (product.price !== null) {
+            this.cardButton.removeAttribute('disabled');
             return 'Купить'
         } else {
             this.cardButton.setAttribute('disabled', 'true');
@@ -60,7 +67,7 @@ export class CardPreview extends Card /*implements ICardPreview*/ {
         }
     }
 
-    renderValue(product: IProductItem) {
+    setCardButtonValue(product: IProductItem) {
         this.cardButton.textContent = this.abilityToBuy(product);
-    }*/
+    }
 }

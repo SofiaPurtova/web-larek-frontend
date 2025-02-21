@@ -1,9 +1,6 @@
 import { IProductItem } from "../../types";
 import { IEvents } from "../base/events";
 
-// Модель данных для корзины. Необходимо: 
-// - удалять/добавлять товар 
-// - получать итоговую сумму заказа
 export interface IBasketModel {
     addProduct(product: IProductItem): void;
     deleteProduct(id: string): void;
@@ -19,14 +16,20 @@ export class BasketModel implements IBasketModel {
 
     constructor(protected events: IEvents) {}
 
+    isInTheBasket(id: string) {
+        return this.basketProducts.some(item => item.id === id);
+    }
+
     addProduct(product: IProductItem) {
-        this.basketProducts.push(product);
-        this.events.emit('basket:changed');
+        if (!(this.isInTheBasket(product.id))) {
+            this.basketProducts.push(product);
+            this.events.emit('product:select', {id: product.id});
+        }
     }
 
     deleteProduct(id: string) {
         this.basketProducts = this.basketProducts.filter(product => product.id !== id);
-        this.events.emit('basket:changed');
+        this.events.emit('product:select', {id: id});
     }
     
     getBasketProducts(): IProductItem[] {
@@ -43,18 +46,16 @@ export class BasketModel implements IBasketModel {
         this.basketProducts.forEach(product=> {
             if (product && product.price) {
                 tempSumm = tempSumm + product.price;
-                console.log(product.price);
              } else {
                 console.log('Объект не инициализирован или не содержит свойство price');
              }
-            //tempSumm = tempSumm + product.price;
         });
         return tempSumm;
     }
 
     deleteAllProducts() {
         this.basketProducts = [];
-        this.events.emit('basket:changed');
+        this.events.emit('basket:isEmpty');
     }
 
     setBasketProducts(products: IProductItem[]) {

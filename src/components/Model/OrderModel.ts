@@ -1,11 +1,6 @@
-import { FormErrors, IOrder, IReadyOrder } from "../../types";
+import { FormErrors, IReadyOrder } from "../../types";
 import { IEvents } from "../base/events";
 
-// Модель заказа. Необходимо: 
-// - выбирать способ оплаты
-// - вводить адрес и поверять его на правильность
-// - вводить контактные данные и проверять их
-// -получать оформленный заказ
 export interface IOrderModel {
     payment: string;
     email: string;
@@ -13,8 +8,6 @@ export interface IOrderModel {
     address: string;
     total: number;
     items: string[];
-    // setWayOfPayment(): void; с данными, вроде, ничего не происходит в таком случае
-    // validateWayOfPayment(): boolean;
     setAddress(field: string, value: string): void;
     validateAddress(): boolean;
 
@@ -41,9 +34,6 @@ export class OrderModel implements IOrderModel {
       this.total = 0;
       this.items = [];
     }
-
-    //setWayOfPayment(): void {}
-    //validateWayOfPayment(): boolean {}
 
     setAddress(field: string, value: string) {
       if (field === 'address') {
@@ -120,4 +110,17 @@ export class OrderModel implements IOrderModel {
         items: this.items,
       }
     }
+
+    /*reset() {
+      this.payment = '';
+      this.email = '';
+      this.phone = '';
+      this.address = '';
+      this.total = 0;
+      this.items = [];
+      this.formErrors = {};
+      this.events.emit('formErrors:address', this.formErrors);
+      this.events.emit('formErrors:emailAndTelephone', this.formErrors);
+  }*/
+  
 }

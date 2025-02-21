@@ -27,7 +27,6 @@ export class Contacts extends Component<IOrder> {
                 const field = target.name;
                 const value = target.value;
                 this.events.emit('contacts:change', { field, value });
-                console.log('miiiis');
             });
         });
 
@@ -36,10 +35,6 @@ export class Contacts extends Component<IOrder> {
             this.events.emit('success:open');
         });
     }
-
-    /*set inputFields(value: string) {
-        // ...
-    }*/
 
     set validation(value: boolean) {
         this.orderButton.disabled = !value;

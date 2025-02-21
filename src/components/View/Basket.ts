@@ -1,4 +1,4 @@
-import { ensureElement } from "../../utils/utils";
+import { createElement, ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 import { IEvents } from "../base/events";
 
@@ -30,12 +30,14 @@ export class Basket extends Component<IBasket> {
     }
 
     set productCards(products: HTMLElement[]) {
-        this.basketList.replaceChildren(...products);
+        if (products.length > 0) {
+            this.basketList.replaceChildren(...products);
+            this.basketButton.removeAttribute('disabled');
+        } else {
+            this.basketButton.setAttribute('disabled', 'disabled');
+            this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', {textContent: 'Корзина пуста'}));
+        }
     }
-
-    /*set button(data: HTMLButtonElement) {
-        // ...
-    }*/
 
     setSumm(value: number) {
         this.setText(this.basketSumm, `${value} синапсов`);
@@ -43,5 +45,13 @@ export class Basket extends Component<IBasket> {
 
     renderCounter(value: number) {
         this.setText(this.basketCounter, value);
+    }
+
+    abilityToFuther(value: number) {
+        if (value > 0) {
+            this.basketButton.setAttribute('disabled', 'true');
+        } else {
+            this.basketButton.removeAttribute('disabled');
+        }
     }
 }

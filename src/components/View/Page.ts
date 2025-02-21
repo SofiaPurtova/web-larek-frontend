@@ -26,12 +26,4 @@ export class Page extends Component<IPage> implements IPage{
         this.galleryContainer.replaceChildren(...products);
     }
 
-    /*set basket(data: HTMLButtonElement) {
-        this.headerBasket = data;
-    } убрала сеттер, т.к. сама иконка корзины - не интерактивный элемент
-
-    set counter(value: number) {
-        this.setText(this.headerBasketCounter, value);
-    }*/
-
 }

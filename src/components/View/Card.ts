@@ -34,6 +34,12 @@ export class Card extends Component<IProductItem> {
     protected cardImage: HTMLImageElement;
     protected cardPrice: HTMLElement;
     protected cardId: string;
+    protected categoryColor = <Record<string, string>>{
+        "кнопка": "button",
+        "другое": "other",
+        "хард-скил": "hard",
+        "дополнительное": "additional"        
+    } 
 
     constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
@@ -48,6 +54,7 @@ export class Card extends Component<IProductItem> {
 
     set category(value: string) {
         this.setText(this.cardCategory, value);
+        this.cardCategory.classList.add(`card__category_${this.categoryColor[value]}`);
     }
 
     set title(value: string) {

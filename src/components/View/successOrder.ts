@@ -24,9 +24,4 @@ export class SuccessOrder extends Component<ISuccessOrder> {
     setDescription(value: number) {
         this.setText(this.successDescription, `Списано ${value} синапсов`);
     }
-
-    /*set button(data: HTMLButtonElement) {
-        // ...
-        //this.events.emit('success:close');
-    }*/
 }

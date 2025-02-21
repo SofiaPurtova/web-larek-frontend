@@ -39,14 +39,11 @@ const order = new Order(cloneTemplate(orderTemplate), events);
 const orderModel = new OrderModel(events);
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
-const gallery = document.querySelector('.gallery') as HTMLElement;
-
 
 
 api.getProductCards()
     .then(function(data: IProductItem[]) {
         larekModel.setProducts(data);
-        console.log(larekModel);
     })
     .catch(err => console.log(err));
 
@@ -54,20 +51,33 @@ events.on('products:changed', () => {
     const cardsHTML = larekModel.getProducts().map(card => new Card(cloneTemplate(cardTemplate), events).render(card));
     page.render({
         gallery: cardsHTML
-        //counter: basketModel.getCounter()
     })
 });
 
 events.on('product:select', ({id}: {id: string}) => {
     larekModel.setPreview(larekModel.getProduct(id));
-    //larekModel.setPreview(product);
 });
 
-events.on('product:open', /*(product: IProductItem)*/({id}: {id: string}) => {  
-    cardPreview.render(/*product*/larekModel.getProduct(id));
-    //cardPreview.renderValue(larekModel.getProduct(id));
+events.on('product:open', ({id}: {id: string}) => {  
+    cardPreview.setCardButtonValue(larekModel.getProduct(id));
+
+    if (basketModel.isInTheBasket(id)) {
+        cardPreview.setTextForButton(id, 'Убрать');
+    } else {
+        cardPreview.setTextForButton(id, 'Купить');
+    }
+    
+    modal.content = cardPreview.render(larekModel.getProduct(id));
     modal.render({content: cardPreview.render()});
-    console.log(typeof /*product*/larekModel.getProduct(id));
+});
+
+events.on('product:clickButton', ({id}: {id: string}) => {
+    if (basketModel.isInTheBasket(id)) {
+        basketModel.deleteProduct(id);
+    } else {
+        basketModel.addProduct(larekModel.getProduct(id));
+    }
+    basket.renderCounter(basketModel.getCounter());
 });
 
 events.on('modal:open', () => {
@@ -77,22 +87,6 @@ events.on('modal:open', () => {
 events.on('modal:close', () => {
     modal.lock = false;
 });
-
-events.on('product:addToTheBasket', ({id}: {id: string}) => {
-    basketModel.addProduct(larekModel.getProduct(id));
-    //console.log(basketModel.getBasketProducts())
-    basket.renderCounter(basketModel.getCounter());
-    modal.close;
-});
-
-//Ни в какую продукты не удаляются из корзины
-/*events.on('basket:changed', () => {
-    const basketHTML = basketModel.getBasketProducts().map(cardBask => new BasketCard(cloneTemplate(basketCardTemplate), events).render(cardBask));
-    basket.render({
-        productCards: basketHTML
-    })
-})*/ 
-
 
 events.on('basket:open', () => {
     basket.setSumm(basketModel.getFinalSumm());
@@ -131,27 +125,40 @@ events.on('order:inputAddress', (inf: {field: string, value: string}) => {
 events.on('formErrors:address', (err: Partial<IOrderForm>) => {
     const {address, payment} = err;
     order.validation = !address && !payment;
-    order.formErrors.textContent = Object.values({address, payment}).filter(i => !!i).join('; ');
-    
+    const errors = [];
+    const values = Object.values({address, payment});
+
+    for (let i = 0; i < values.length; i++) {
+        if (values[i]) {
+            errors.push(values[i]);
+        }
+    }
+    order.formErrors.textContent = errors.join('; ');    
 });
 
 events.on('contacts:unblock', () => {
     orderModel.total = basketModel.getFinalSumm();
     modal.content = contacts.render();
     modal.render({content: contacts.render()});
-    console.log('lookig next');
 });
 
 events.on('contacts:change', (data: {field: string, value: string}) => {
     orderModel.setEmailAndTelephone(data.field, data.value);
-    console.log('mistake here');
 });
 
 events.on('formErrors:emailAndTelephone', (err: Partial<IOrderForm>) => {
-    console.log('mistale here');
     const { email, phone} = err;
     contacts.validation = !email && !phone;
-    contacts.formErrors.textContent = Object.values({phone, email}).filter(i => !!i).join('; ');
+    
+    const errors = [];
+    const values = Object.values({phone, email});
+
+    for (let i = 0; i < values.length; i++) {
+        if (values[i]) {
+            errors.push(values[i]);
+        }
+    }
+    contacts.formErrors.textContent = errors.join('; ');  
 });
 
 events.on('success:open', () => {
@@ -161,10 +168,10 @@ events.on('success:open', () => {
         const success = new SuccessOrder(cloneTemplate(succesTemplate), events);
         success.setDescription(basketModel.getFinalSumm());
         modal.content = success.render();
-        //modal.render({content: success.render()});
         basketModel.deleteAllProducts();
         basket.renderCounter(basketModel.getCounter());
         modal.render({content: success.render()});
+        //sorderModel.reset();
     })
     .catch(err => console.log(err));
 })
@@ -172,46 +179,3 @@ events.on('success:open', () => {
 events.on('success:close', () => {
     modal.close();
 });
-
-/*const prs = mod.getProducts();
-prs.forEach(function(obj) {
-    console.log('флаг1');
-    const newObj = {
-        category: obj.category,
-        image: obj.image,
-        price: obj.price,
-        title: obj.title
-    }
-    gallery.append(card1.render(newObj));
-});
-
-
-
-
-const card1 = new Card(cloneTemplate(cardTemplate), events);
-
-/*const obj1 = {
-    category: 'софт-скил',
-    image: '/5_Dots.svg',
-    price: 759,
-    title: '+1 час в сутках'
-}
-//gallery.append(card1.render(obj1));
- pr.forEach(function(obj) {
-    gallery.append(card1.render(obj));
-});*/
-
-
-
-/*basket.setProducts(pr);
-console.log(basket);
-// console.log(basket.getBasketProduct('b06cde61-912f-4663-9751-09956c0eed67'));
-basket.addProduct({
-    "id": "90973ae5-285c-4b6f-a6d0-65d1d760b102",
-    "description": "Сжимайте мячик, чтобы снизить стресс от тем по бэкенду.",
-    "image": "/Mithosis.svg",
-    "title": "Бэкенд-антистресс",
-    "category": "другое",
-    "price": 1000
-});
-console.log(basket);*/
