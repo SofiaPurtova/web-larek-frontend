@@ -61,9 +61,7 @@ events.on('product:select', ({id}: {id: string}) => {
 });
 
 events.on('product:open', ({id}: {id: string}) => {  
-    cardPreview.setTextForButton(id, basketModel.isInTheBasket(id) ?  'Убрать' : 'Купить');     
-    //modal.content = cardPreview.render(larekModel.getProduct(id));
-    //modal.render({content: cardPreview.render()});
+    cardPreview.setTextForButton(id, basketModel.isInTheBasket(id) ?  'Убрать' : 'Купить');
     modal.render({content: cardPreview.render(larekModel.getProduct(id))});
 });
 
@@ -107,7 +105,6 @@ events.on('product:delete', ({id}: {id: string}) => {
 });
 
 events.on('order:futherFromBasket', () => {
-    //modal.content = order.render();
     modal.render({content: order.render()});
     orderModel.items = basketModel.getBasketProducts().map(product => product.id);
 });
@@ -121,12 +118,12 @@ events.on('order:inputAddress', (inf: {field: string, value: string}) => {
 events.on('formErrors:address', (err: Partial<IOrderForm>) => {
     const {address, payment} = err;
     order.validation = !address && !payment;
-    order.formErrors.textContent = orderModel.createErrorText({ address, payment });   
+    order.formErrors.textContent = Object.values({address, payment}).filter(i => !!i).join('; ');
+    modal.render({content: order.render()});  
 });
 
 events.on('contacts:unblock', () => {
     orderModel.total = basketModel.getFinalSumm();
-    //modal.content = contacts.render();
     modal.render({content: contacts.render()});
 });
 
@@ -137,7 +134,8 @@ events.on('contacts:change', (data: {field: string, value: string}) => {
 events.on('formErrors:emailAndTelephone', (err: Partial<IOrderForm>) => {
     const { email, phone} = err;
     contacts.validation = !email && !phone;
-    order.formErrors.textContent = orderModel.createErrorText({ email, phone });
+    contacts.formErrors.textContent = Object.values({phone, email}).filter(i => !!i).join('; ');
+    modal.render({content: contacts.render()});
 });
 
 events.on('success:open', () => {
