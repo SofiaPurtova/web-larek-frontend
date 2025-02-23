@@ -18,7 +18,6 @@ import { OrderModel } from './components/Model/OrderModel';
 import { Contacts } from './components/View/Contacts';
 import { SuccessOrder } from './components/View/SuccessOrder';
 
-
 const basketTemplate = document.querySelector('#basket') as HTMLTemplateElement;
 const basketCardTemplate = document.querySelector('#card-basket') as HTMLTemplateElement;
 const cardTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
