@@ -17,6 +17,8 @@ import { Order } from './components/View/Order';
 import { OrderModel } from './components/Model/OrderModel';
 import { Contacts } from './components/View/Contacts';
 import { SuccessOrder } from './components/View/SuccessOrder';
+// Очень странно, у меня в папке проекта SuccesssOrder написано с большой буквы, никаких ошибок нет
+
 
 const basketTemplate = document.querySelector('#basket') as HTMLTemplateElement;
 const basketCardTemplate = document.querySelector('#card-basket') as HTMLTemplateElement;
