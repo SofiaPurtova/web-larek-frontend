@@ -66,7 +66,7 @@ export class Card extends Component<IProductItem> {
         this.cardImage.alt = this.title;
     }
 
-    set price(value: string | null) {
+    set price(value: number | null) {
         if (value === null) {
             this.setText(this.cardPrice, 'Бесценно');
         } else {
@@ -74,7 +74,7 @@ export class Card extends Component<IProductItem> {
         }
     }
 
-    // сейчас попробуем (все айдишники в случае чего - убрать)
+    
     set id(value: string) {
         this.cardId = value;
     }

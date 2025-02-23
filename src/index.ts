@@ -17,7 +17,8 @@ import { Order } from './components/View/Order';
 import { OrderModel } from './components/Model/OrderModel';
 import { Contacts } from './components/View/Contacts';
 import { SuccessOrder } from './components/View/SuccessOrder';
-// Очень странно, у меня в папке проекта SuccesssOrder написано с большой буквы, никаких ошибок нет
+// Очень странно, у меня в папке проекта папка SuccesssOrder написана с большой буквы, никаких ошибок нет
+// Почему-то в git название папки не совпадат
 
 
 const basketTemplate = document.querySelector('#basket') as HTMLTemplateElement;
@@ -60,16 +61,10 @@ events.on('product:select', ({id}: {id: string}) => {
 });
 
 events.on('product:open', ({id}: {id: string}) => {  
-    cardPreview.setCardButtonValue(larekModel.getProduct(id));
-
-    if (basketModel.isInTheBasket(id)) {
-        cardPreview.setTextForButton(id, 'Убрать');
-    } else {
-        cardPreview.setTextForButton(id, 'Купить');
-    }
-    
-    modal.content = cardPreview.render(larekModel.getProduct(id));
-    modal.render({content: cardPreview.render()});
+    cardPreview.setTextForButton(id, basketModel.isInTheBasket(id) ?  'Убрать' : 'Купить');     
+    //modal.content = cardPreview.render(larekModel.getProduct(id));
+    //modal.render({content: cardPreview.render()});
+    modal.render({content: cardPreview.render(larekModel.getProduct(id))});
 });
 
 events.on('product:clickButton', ({id}: {id: string}) => {
@@ -78,7 +73,7 @@ events.on('product:clickButton', ({id}: {id: string}) => {
     } else {
         basketModel.addProduct(larekModel.getProduct(id));
     }
-    basket.renderCounter(basketModel.getCounter());
+    page.renderCounter(basketModel.getCounter());
 });
 
 events.on('modal:open', () => {
@@ -101,7 +96,7 @@ events.on('basket:open', () => {
 
 events.on('product:delete', ({id}: {id: string}) => {
     basketModel.deleteProduct(id);
-    basket.renderCounter(basketModel.getCounter());
+    page.renderCounter(basketModel.getCounter());
     basket.setSumm(basketModel.getFinalSumm());
     basket.productCards = basketModel.getBasketProducts().map((product, index) => {
         const basketCard = new BasketCard(cloneTemplate(basketCardTemplate), events);
@@ -112,7 +107,7 @@ events.on('product:delete', ({id}: {id: string}) => {
 });
 
 events.on('order:futherFromBasket', () => {
-    modal.content = order.render();
+    //modal.content = order.render();
     modal.render({content: order.render()});
     orderModel.items = basketModel.getBasketProducts().map(product => product.id);
 });
@@ -126,20 +121,12 @@ events.on('order:inputAddress', (inf: {field: string, value: string}) => {
 events.on('formErrors:address', (err: Partial<IOrderForm>) => {
     const {address, payment} = err;
     order.validation = !address && !payment;
-    const errors = [];
-    const values = Object.values({address, payment});
-
-    for (let i = 0; i < values.length; i++) {
-        if (values[i]) {
-            errors.push(values[i]);
-        }
-    }
-    order.formErrors.textContent = errors.join('; ');    
+    order.formErrors.textContent = orderModel.createErrorText({ address, payment });   
 });
 
 events.on('contacts:unblock', () => {
     orderModel.total = basketModel.getFinalSumm();
-    modal.content = contacts.render();
+    //modal.content = contacts.render();
     modal.render({content: contacts.render()});
 });
 
@@ -150,16 +137,7 @@ events.on('contacts:change', (data: {field: string, value: string}) => {
 events.on('formErrors:emailAndTelephone', (err: Partial<IOrderForm>) => {
     const { email, phone} = err;
     contacts.validation = !email && !phone;
-    
-    const errors = [];
-    const values = Object.values({phone, email});
-
-    for (let i = 0; i < values.length; i++) {
-        if (values[i]) {
-            errors.push(values[i]);
-        }
-    }
-    contacts.formErrors.textContent = errors.join('; ');  
+    order.formErrors.textContent = orderModel.createErrorText({ email, phone });
 });
 
 events.on('success:open', () => {
@@ -170,7 +148,8 @@ events.on('success:open', () => {
         success.setDescription(basketModel.getFinalSumm());
         modal.content = success.render();
         basketModel.deleteAllProducts();
-        basket.renderCounter(basketModel.getCounter());
+        orderModel.reset();
+        page.renderCounter(basketModel.getCounter());
         modal.render({content: success.render()});
         //sorderModel.reset();
     })

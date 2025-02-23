@@ -100,6 +100,17 @@ export class OrderModel implements IOrderModel {
       return Object.keys(errors).length === 0;
   }
 
+  createErrorText(errorsObject: object) {
+    const values = Object.values(errorsObject);
+    const errors = [];
+    for (let i = 0; i < values.length; i++) {
+        if (values[i]) {
+            errors.push(values[i]);
+        }
+    }
+    return errors.join('; ');
+}
+
     getReadyOrder(): IReadyOrder {
       return {
         payment: this.payment,
@@ -111,7 +122,7 @@ export class OrderModel implements IOrderModel {
       }
     }
 
-    /*reset() {
+    reset() {
       this.payment = '';
       this.email = '';
       this.phone = '';
@@ -121,6 +132,6 @@ export class OrderModel implements IOrderModel {
       this.formErrors = {};
       this.events.emit('formErrors:address', this.formErrors);
       this.events.emit('formErrors:emailAndTelephone', this.formErrors);
-  }*/
+  }
   
 }

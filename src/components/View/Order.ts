@@ -53,4 +53,5 @@ export class Order extends Component<IOrder> {
     set validation(value: boolean) {
         this.orderButton.disabled = !value;
     }
+    
 }
